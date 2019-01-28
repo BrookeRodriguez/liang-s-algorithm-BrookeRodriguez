@@ -11,7 +11,7 @@ public class Node
     {
         this.character = character;
         this.isEndOfWord = isEndOfWord;
-        nextCharArr = new Node[26];
+        nextCharArr = new Node[27];
     }
 
     public void addNextChar (Node nextChar)
@@ -45,7 +45,7 @@ public class Node
     public Node getNextChar (char nextChar)
     {
         for (int i = 0; i < nextCharArr.length; i++)
-            if (nextCharArr[i].character == nextChar)
+            if (nextCharArr[i] != null && nextCharArr[i].character == nextChar)
                 return nextCharArr[i];
         return null;
     }

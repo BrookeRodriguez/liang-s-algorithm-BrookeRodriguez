@@ -7,17 +7,16 @@ public class Trie
     Node root = new Node ('\u0000', false);
     private boolean isLiang = false;
 
-    Trie (ArrayList<String> wordList)
+    Trie (String[] wordList)
     {
         String temp;
         Node currNode = root;
 
-        for (int i = 0; i < wordList.size(); i++)
+        for (int i = 0; i < wordList.length; i++)
         {
-            temp = wordList.get(i);
+            temp = wordList[i];
 
             for (int j = 0; j < temp.length(); j++)
-            {
                 if (currNode.getNextChar(temp.charAt(j)) == null)
                 {
                     if (temp.length() == j + 1)
@@ -28,23 +27,21 @@ public class Trie
 
                 else
                     currNode = currNode.getNextChar(temp.charAt(j));
-            }
         }
     }
 
-    Trie (ArrayList<String> wordList, boolean isLiang)
+    Trie (String[] wordList, boolean isLiang)
     {
         this.isLiang = isLiang;
 
         String temp;
         Node currNode = root;
 
-        for (int i = 0; i < wordList.size(); i++)
+        for (int i = 0; i < wordList.length; i++)
         {
-            temp = wordList.get(i);
+            temp = wordList[i];
 
             for (int j = 0; j < temp.length(); j++)
-            {
                 if (currNode.getNextChar(temp.charAt(j)) == null)
                 {
                     if (temp.length() == j + 1)
@@ -55,7 +52,6 @@ public class Trie
 
                 else
                     currNode = currNode.getNextChar(temp.charAt(j));
-            }
         }
     }
 
@@ -68,23 +64,25 @@ public class Trie
             if (currNode.getNextChar(word.charAt(i)) == null)
                 return false;
             else if (currNode.getNextChar(word.charAt(i)).isEndOfWord && word.length() == i + 1)
-                return true;
-            currNode = currNode.getNextChar(word.charAt(i));
+                currNode = currNode.getNextChar(word.charAt(i));
         }
 
         return false;
     }
 
-    public void getSuggestions (String word)
+    public boolean getSuggestions (String word)
     {
         if (isWord(word))
-            return;
+            return false;
 
         System.out.println("This is not a word. Did you mean to type:");
 
         Node currNode = root;
-        for (int i = 0; i < word.length(); i++)
+        for (int i = 0; i < word.length(); i++) {
+            System.out.println("hello");
             currNode = currNode.getNextChar(word.charAt(i));
+
+        }
 
         String temp;
         Node randomNode;
@@ -102,6 +100,8 @@ public class Trie
             }
             System.out.println(i + ". " + temp);
         }
+
+        return true;
     }
 
     public boolean removeWord (String word)
