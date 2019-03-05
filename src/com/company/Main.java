@@ -36,12 +36,11 @@ public class Main
         Trie liangTrie = new Trie(liangList, true);
         Trie wordTrie = new Trie(wordsList);
 
+        //wordTrie.printInorder(wordTrie.root);
+
         System.out.println("Please type a word below to be to be hyphenated:");
 
         String word = typed.nextLine().toLowerCase();
-
-        while (wordTrie.getSuggestions(word))
-            word = typed.nextLine().toLowerCase();
 
         word = "." + typed + ".";
 

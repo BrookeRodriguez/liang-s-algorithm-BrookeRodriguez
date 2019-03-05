@@ -16,17 +16,16 @@ public class Trie
         {
             temp = wordList[i];
 
-            for (int j = 0; j < temp.length(); j++)
-                if (currNode.getNextChar(temp.charAt(j)) == null)
-                {
-                    if (temp.length() == j + 1)
-                        root = new Node (temp.charAt(j), true);
-                    else
-                        root = new Node (temp.charAt(j), false);
+            for (int j = 0; j < temp.length(); j++) {
+
+                if (currNode.getNextChar(temp.charAt(j)) == null) {                                                     //NullPointerException Thrown
+
+                    if (temp.length() == j + 1) currNode.addNextChar(new Node(temp.charAt(j), true));
+                    else currNode.addNextChar(new Node(temp.charAt(j), false));
                 }
 
-                else
-                    currNode = currNode.getNextChar(temp.charAt(j));
+                currNode = currNode.getNextChar(temp.charAt(j));
+            }
         }
     }
 
@@ -63,11 +62,53 @@ public class Trie
         {
             if (currNode.getNextChar(word.charAt(i)) == null)
                 return false;
-            else if (currNode.getNextChar(word.charAt(i)).isEndOfWord && word.length() == i + 1)
-                currNode = currNode.getNextChar(word.charAt(i));
+            currNode = currNode.getNextChar(word.charAt(i));
         }
 
-        return false;
+        return true;
+    }
+
+    void printInorder()
+    {
+        Node currNode = root;
+        Node[] nodeArr = currNode.nextCharArr;
+
+        System.out.println(currNode.character);
+
+        for (int i = 0; i < nodeArr.length; i++)
+        {
+            //Print out and mark as used
+            if (nodeArr[i] == null)
+                System.out.println("- ");
+
+            else
+            {
+                System.out.println(nodeArr[i].character + " ");
+                nodeArr[i].lookedAt = true;
+            }
+
+            //Checks for the last node. If so, then move to the next level.
+            /*
+            if (i == nodeArr.length - 1)
+            {
+                for (int j = 0; j < nodeArr.length; j++)
+                {
+                    if (nodeArr[j] != null)
+                    {
+                        if (nodeArr[0].nextCharArr.length == 0)
+                        {
+                            //Breakout
+                        }
+
+                        else
+                        {
+                            nodeArr = nodeArr[j].nextCharArr;
+                        }
+                    }
+                }
+            }
+            */
+        }
     }
 
     public boolean getSuggestions (String word)
@@ -77,9 +118,10 @@ public class Trie
 
         System.out.println("This is not a word. Did you mean to type:");
 
+        ArrayList<int[]> letters = new ArrayList<>();
         Node currNode = root;
         for (int i = 0; i < word.length(); i++) {
-            System.out.println("hello");
+            System.out.println("hello" + currNode.getNextChar(word.charAt(i)));
             currNode = currNode.getNextChar(word.charAt(i));
 
         }
@@ -87,22 +129,25 @@ public class Trie
         String temp;
         Node randomNode;
         int randomNum;
-        for (int i = 0; i < 6; i++)
-        {
-            temp = new String(word);
-            randomNode = currNode;
-            while (randomNode.isEndOfWord == false)
-            {
-                randomNum = (int) (Math.random() * 26);
-                while (randomNode.nextCharArr[randomNum] == null)
-                    randomNum = (int) (Math.random() * 26);
-                temp += randomNode.character;
-            }
-            System.out.println(i + ". " + temp);
-        }
 
         return true;
     }
+
+    /*
+    private void getSuggestionsHelper (Node currNode, int counter)
+    {
+        for (int i = 0; i < 28; i++)
+        {
+            if (currNode.getNextChar(i) != null)
+            {
+                if (currNode.getNextChar(i).isEndOfWord)
+                {
+
+                }
+            }
+        }
+    }
+    */
 
     public boolean removeWord (String word)
     {
@@ -125,7 +170,7 @@ public class Trie
 
         for (int k = 0; k < convertWord.length() - 1; k++)
         {
-            word = word.substring(k, convertWord.length());
+            word = word.substring(k);
             helper(root, word, 6, false);
             liangWord = liangWord.substring(0, k) + word.substring(k);
         }
